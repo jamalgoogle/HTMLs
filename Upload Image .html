@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <style>
+      body {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         min-height: 100vh;
+         margin: 0;
+         background-color: #f0f0f0;
+         font-family: Arial, sans-serif;
+      }
+      .container {
+         background-color: white;
+         padding: 30px;
+         border-radius: 10px;
+         box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .upload-section {
+         text-align: center;
+      }
+      .upload-button {
+         display: inline-block;
+         padding: 12px 24px;
+         background-color: #4CAF50;
+         color: white;
+         cursor: pointer;
+         border-radius: 25px;
+         font-size: 16px;
+         transition: background-color 0.3s, transform 0.2s;
+      }
+      .upload-button:hover {
+         background-color: #45a049;
+         transform: scale(1.05);
+      }
+      .image-preview {
+         margin-top: 20px;
+         border: 2px dashed #ccc;
+         border-radius: 5px;
+         padding: 20px;
+      }
+      #previewImage {
+         border-radius: 5px;
+         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+   </style>
+</head>
+<body>
+   <div class="container">
+      <div class="upload-section">
+         <input type="file" id="imageUpload" accept="image/*" style="display: none;">
+         <label for="imageUpload" class="upload-button">Upload Image</label>
+         <div id="imagePreview" class="image-preview">
+            <img id="previewImage" src="#" alt="Preview" style="display: none; max-width: 100%; max-height: 300px;">
+         </div>
+      </div>
+   </div>
+
+
+   <script>
+      document.getElementById('imageUpload').addEventListener('change', function(event) {
+         const file = event.target.files[0];
+         if (file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+               const previewImage = document.getElementById('previewImage');
+               previewImage.src = e.target.result;
+               previewImage.style.display = 'block';
+            }
+            reader.readAsDataURL(file);
+         }
+      });
+   </script>
+</body>
+</html>
