@@ -1,0 +1,190 @@
+  <!DOCTYPE html>
+  <html lang="en">
+  <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <title>Todo List</title>
+      <style>
+          body {
+              font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+              max-width: 600px;
+              margin: 0 auto;
+              padding: 20px;
+              background-color: #f0f4f8;
+              color: #333;
+          }
+          h1 {
+              text-align: center;
+              color: #2c3e50;
+              font-size: 2.5em;
+              margin-bottom: 30px;
+              
+          }
+          #todo-list {
+              list-style-type: none;
+              padding: 0;
+          }
+          .todo-item {
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+              padding: 15px;
+              margin-bottom: 15px;
+              background-color: #ffffff;
+              border-radius: 8px;
+              box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+              transition: all 0.3s ease;
+          }
+          .todo-item:hover {
+              cursor: move;
+              transform: translateY(-2px);
+              box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+          }
+          .todo-text {
+              flex-grow: 1;
+              margin-right: 10px;
+              font-size: 1.1em;
+          }
+          .todo-actions button {
+              margin-left: 5px;
+              padding: 8px 12px;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              transition: background-color 0.3s ease;
+          }
+          .todo-actions button:hover {
+              opacity: 0.8;
+          }
+          .todo-actions button:first-child {
+              background-color: #3498db;
+              color: white;
+          }
+          .todo-actions button:last-child {
+              background-color: #e74c3c;
+              color: white;
+          }
+          #new-todo {
+              width: 70%;
+              padding: 10px;
+              font-size: 1em;
+              border: 2px solid #3498db;
+              border-radius: 4px;
+              margin-right: 10px;
+          }
+          #add-todo {
+              padding: 10px 20px;
+              background-color: #2ecc71;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 1em;
+              transition: background-color 0.3s ease;
+          }
+          #add-todo:hover {
+              background-color: #27ae60;
+          }
+          .edit-form {
+              display: none;
+              margin-top: 10px;
+          }
+          .edit-form input {
+              width: 70%;
+              padding: 8px;
+              font-size: 1em;
+              border: 2px solid #3498db;
+              border-radius: 4px;
+              margin-right: 10px;
+          }
+          .edit-form button {
+              padding: 8px 12px;
+              background-color: #3498db;
+              color: white;
+              border: none;
+              border-radius: 4px;
+              cursor: pointer;
+              font-size: 1em;
+          }
+      </style>
+  </head>
+  <body>
+      <h1>Todo List</h1>
+      <div>
+          <input type="text" id="new-todo" placeholder="Enter a new todo">
+          <button id="add-todo">Add</button>
+      </div>
+      <ul id="todo-list"></ul>
+
+      <script>
+          const todoList = document.getElementById('todo-list');
+          const newTodoInput = document.getElementById('new-todo');
+          const addTodoButton = document.getElementById('add-todo');
+
+          let todos = [];
+
+          function renderTodos() {
+              todoList.innerHTML = '';
+              todos.forEach((todo, index) => {
+                  const li = document.createElement('li');
+                  li.className = 'todo-item';
+                  li.draggable = true;
+                  li.innerHTML = `
+                      <span class="todo-text">${todo}</span>
+                      <div class="todo-actions">
+                          <button onclick="editTodo(${index})">Edit</button>
+                          <button onclick="deleteTodo(${index})">Delete</button>
+                      </div>
+                      <form class="edit-form" onsubmit="submitEdit(event, ${index})">
+                          <input type="text" value="${todo}">
+                          <button type="submit">Save</button>
+                      </form>
+                  `;
+                  todoList.appendChild(li);
+              });
+          }
+
+          function addTodo() {
+              const newTodo = newTodoInput.value.trim();
+              if (newTodo) {
+                  todos.push(newTodo);
+                  newTodoInput.value = '';
+                  renderTodos();
+              }
+          }
+
+          function editTodo(index) {
+              const todoItem = todoList.children[index];
+              const editForm = todoItem.querySelector('.edit-form');
+              const todoText = todoItem.querySelector('.todo-text');
+              const todoActions = todoItem.querySelector('.todo-actions');
+            
+              todoText.style.display = 'none';
+              todoActions.style.display = 'none';
+              editForm.style.display = 'block';
+          }
+
+          function submitEdit(event, index) {
+              event.preventDefault();
+              const newText = event.target.querySelector('input').value.trim();
+              if (newText) {
+                  todos[index] = newText;
+                  renderTodos();
+              }
+          }
+
+          function deleteTodo(index) {
+              todos.splice(index, 1);
+              renderTodos();
+          }
+
+
+          addTodoButton.addEventListener('click', addTodo);
+          newTodoInput.addEventListener('keypress', (e) => {
+              if (e.key === 'Enter') addTodo();
+          });
+
+          renderTodos();
+      </script>
+  </body>
+  </html>
