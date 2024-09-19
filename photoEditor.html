@@ -1,0 +1,170 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Editor</title>
+    <style>
+        body, html {
+            margin: 10px;
+            padding: 0;
+            height: 90vh;
+            font-family: Arial, sans-serif;
+        }
+        .container {
+            display: flex;
+            height: 100%;
+        }
+        .photo-container {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
+        }
+        #photo {
+            max-width: 100%;
+            max-height: 100%;
+            padding: 30px;
+            margin: 40px;
+        }
+        .controls {
+            flex: 1;
+            padding: 20px;
+            background-color: #e0e0e0;
+            overflow-y: auto;
+        }
+        .control-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="range"] {
+            width: 100%;
+        }
+        button {
+            padding: 10px;
+            margin-top: 10px;
+            width: 100%;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #downloadBtn {
+            background-color: #008CBA;
+        }
+        #downloadBtn:hover {
+            background-color: #007B9A;
+        }
+    </style>
+</head>
+</head>
+<body>
+    <div class="container">
+        <div class="photo-container">
+            <img id="photo" src="https://via.placeholder.com/500" alt="Editable photo">
+        </div>
+        <div class="controls">
+            <div class="control-group">
+                <label for="brightness">Brightness:</label>
+                <input type="range" id="brightness" min="0" max="200" value="100">
+            </div>
+            <div class="control-group">
+                <label for="contrast">Contrast:</label>
+                <input type="range" id="contrast" min="0" max="200" value="100">
+            </div>
+            <div class="control-group">
+                <label for="saturation">Saturation:</label>
+                <input type="range" id="saturation" min="0" max="200" value="100">
+            </div>
+            <div class="control-group">
+                <label for="grayscale">Grayscale:</label>
+                <input type="range" id="grayscale" min="0" max="100" value="0">
+            </div>
+            <div class="control-group">
+                <label for="blur">Blur:</label>
+                <input type="range" id="blur" min="0" max="10" value="0" step="0.1">
+            </div>
+            <button id="reset">Reset</button>
+            <input type="file" id="file-input" accept="image/*" style="display: none;">
+            <button id="upload">Upload Image</button>
+            <button id="download">Download Image</button>
+        </div>
+    </div>
+
+    <script>
+        const photo = document.getElementById('photo');
+        const brightness = document.getElementById('brightness');
+        const contrast = document.getElementById('contrast');
+        const saturation = document.getElementById('saturation');
+        const grayscale = document.getElementById('grayscale');
+        const blur = document.getElementById('blur');
+        
+        const reset = document.getElementById('reset');
+        const fileInput = document.getElementById('file-input');
+        const upload = document.getElementById('upload');
+        const download = document.getElementById('download');
+
+        function updateFilters() {
+            photo.style.filter = `
+                brightness(${brightness.value}%)
+                contrast(${contrast.value}%)
+                saturate(${saturation.value}%)
+                grayscale(${grayscale.value}%)
+                blur(${blur.value}px)
+            `;
+        }
+
+
+        [brightness, contrast, saturation, grayscale, blur].forEach(input => {
+            input.addEventListener('input', updateFilters);
+        });
+
+        reset.addEventListener('click', () => {
+            brightness.value = 100;
+            contrast.value = 100;
+            saturation.value = 100;
+            grayscale.value = 0;
+            blur.value = 0;
+            updateFilters();
+        });
+
+
+        upload.addEventListener('click', () => {
+            fileInput.click();
+        });
+
+        fileInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    photo.src = event.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        download.addEventListener('click', () => {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = photo.naturalWidth;
+            canvas.height = photo.naturalHeight;
+            ctx.filter = photo.style.filter;
+            ctx.drawImage(photo, 0, 0, canvas.width, canvas.height);
+            
+            const link = document.createElement('a');
+            link.download = 'edited_image.png';
+            link.href = canvas.toDataURL();
+            link.click();
+        });
+    </script>
+</body>
+</html>
