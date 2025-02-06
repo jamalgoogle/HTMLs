@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Islamic Prayer Times</title>
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+         background: linear-gradient(135deg, #4b6cb7, #263656, #4b6cb7);
+         background-size: 200% 200%;
+         animation: gradientBG 15s ease infinite;
+         min-height: 100vh;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         color: white;
+      }
+
+      @keyframes gradientBG {
+         0% {
+            background-position: 0% 50%;
+         }
+
+         50% {
+            background-position: 100% 50%;
+         }
+
+         100% {
+            background-position: 0% 50%;
+         }
+      }
+
+      .container {
+         background: rgba(255, 255, 255, 0.15);
+         backdrop-filter: blur(15px);
+         padding: 2.5rem;
+         border-radius: 20px;
+         box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+         width: 90%;
+         max-width: 500px;
+         border: 1px solid rgba(255, 255, 255, 0.1);
+         transition: transform 0.3s ease;
+      }
+
+      .container:hover {
+         transform: translateY(-5px);
+      }
+
+      h1 {
+         text-align: center;
+         margin-bottom: 2rem;
+         color: #fff;
+         font-size: 2.2rem;
+         text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+      }
+
+      .prayer-times {
+         display: grid;
+         gap: 1.2rem;
+      }
+
+      .prayer-time {
+         display: flex;
+         justify-content: space-between;
+         padding: 1.2rem;
+         background: rgba(255, 255, 255, 0.1);
+         border-radius: 12px;
+         transition: all 0.3s ease;
+         border: 1px solid rgba(255, 255, 255, 0.05);
+      }
+
+      .prayer-time:hover {
+         background: rgba(255, 255, 255, 0.2);
+         transform: scale(1.02);
+      }
+
+      .location-info {
+         text-align: center;
+         margin-bottom: 2.5rem;
+      }
+
+      button {
+         background: linear-gradient(45deg, #4CAF50, #45a049);
+         color: white;
+         border: none;
+         padding: 0.8rem 1.5rem;
+         border-radius: 25px;
+         cursor: pointer;
+         margin-bottom: 1.2rem;
+         font-size: 1rem;
+         font-weight: bold;
+         transition: all 0.3s ease;
+         box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+      }
+
+      button:hover {
+         background: linear-gradient(45deg, #45a049, #4CAF50);
+         transform: translateY(-2px);
+         box-shadow: 0 6px 20px rgba(76, 175, 80, 0.4);
+      }
+
+      button:active {
+         transform: translateY(1px);
+      }
+
+      #location {
+         font-size: 0.9rem;
+         opacity: 0.9;
+         margin-top: 0.5rem;
+      }
+
+      .prayer-time span:first-child {
+         font-weight: bold;
+         font-size: 1.1rem;
+      }
+
+      .prayer-time span:last-child {
+         color: #a8ff78;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="container">
+      <h1>Islamic Prayer Times</h1>
+      <div class="location-info">
+         <button onclick="getLocation()">Get Current Location</button>
+         <p id="location">Loading location...</p>
+      </div>
+      <div class="prayer-times" id="prayer-times">
+         <div class="prayer-time">
+            <span>Fajr</span>
+            <span id="fajr">--:--</span>
+         </div>
+         <div class="prayer-time">
+            <span>Sunrise</span>
+            <span id="sunrise">--:--</span>
+         </div>
+         <div class="prayer-time">
+            <span>Dhuhr</span>
+            <span id="dhuhr">--:--</span>
+         </div>
+         <div class="prayer-time">
+            <span>Asr</span>
+            <span id="asr">--:--</span>
+         </div>
+         <div class="prayer-time">
+            <span>Maghrib</span>
+            <span id="maghrib">--:--</span>
+         </div>
+         <div class="prayer-time">
+            <span>Isha</span>
+            <span id="isha">--:--</span>
+         </div>
+      </div>
+   </div>
+
+   <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+   <script>
+      function getLocation() {
+         if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(showPosition); // returns current location of user
+         } else {
+            alert("Geolocation is not supported by this browser.");
+         }
+      }
+
+      async function showPosition(position) {
+         const lat = position.coords.latitude; 
+         const lng = position.coords.longitude;
+         try {
+            const response = await axios.get(`https://api.bigdatacloud.net/data/reverse-geocode-client?latitude=${lat}&longitude=${lng}`);
+            const cityName = response.data.city;
+            document.getElementById('location').textContent = `Location: ${cityName}`;
+            getPrayerTimes(lat, lng);
+         } catch (error) {
+            console.error('Error fetching city name:', error);
+            document.getElementById('location').textContent = 'Unable to get city name';
+         }
+      }
+
+      async function getPrayerTimes(lat, lng) {
+         try {
+            const response = await axios.get(`https://api.aladhan.com/v1/timings?latitude=${lat}&longitude=${lng}&method=2`);
+            const timings = response.data.data.timings;
+
+            document.getElementById('fajr').textContent = timings.Fajr;
+            document.getElementById('sunrise').textContent = timings.Sunrise;
+            document.getElementById('dhuhr').textContent = timings.Dhuhr;
+            document.getElementById('asr').textContent = timings.Asr;
+            document.getElementById('maghrib').textContent = timings.Maghrib;
+            document.getElementById('isha').textContent = timings.Isha;
+         } catch (error) {
+            console.error('Error fetching prayer times:', error);
+         }
+      }
+      getLocation();
+   </script>
+</body>
+
+</html>
