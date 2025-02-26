@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Document</title>
+   <style>
+      html, body {
+         height: 100%;
+         margin: 0;
+         padding: 0;
+      }
+      table {
+         border-collapse: collapse;
+         width: 100%;
+         margin: 20px 10px;
+      }
+      
+      td {
+         padding: 10px;
+         text-align: left;
+         border: 1px solid #ddd;
+      }
+      
+      tr:first-child {
+         background-color: #f2f2f2;
+         font-weight: bold;
+      }
+      
+      tr:nth-child(odd) {
+         background-color: #f9f9f9;
+      }
+      
+      tr:hover {
+         background-color: #f5f5f5;
+         cursor: move;
+      }
+
+      .dragging {
+         opacity: 0.5;
+         background-color: #e0e0e0;
+      }
+   </style>
+</head>
+<body>
+   <table border="1">
+      <tbody id="tableBody">
+         <tr>
+            <td>Column 1</td>
+            <td>Column 2</td>
+            <td>Column 3</td>
+            <td>Column 4</td>
+            <td>Column 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 2, Col 1</td>
+            <td>Row 2, Col 2</td>
+            <td>Row 2, Col 3</td>
+            <td>Row 2, Col 4</td>
+            <td>Row 2, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 3, Col 1</td>
+            <td>Row 3, Col 2</td>
+            <td>Row 3, Col 3</td>
+            <td>Row 3, Col 4</td>
+            <td>Row 3, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 4, Col 1</td>
+            <td>Row 4, Col 2</td>
+            <td>Row 4, Col 3</td>
+            <td>Row 4, Col 4</td>
+            <td>Row 4, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 5, Col 1</td>
+            <td>Row 5, Col 2</td>
+            <td>Row 5, Col 3</td>
+            <td>Row 5, Col 4</td>
+            <td>Row 5, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 6, Col 1</td>
+            <td>Row 6, Col 2</td>
+            <td>Row 6, Col 3</td>
+            <td>Row 6, Col 4</td>
+            <td>Row 6, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 7, Col 1</td>
+            <td>Row 7, Col 2</td>
+            <td>Row 7, Col 3</td>
+            <td>Row 7, Col 4</td>
+            <td>Row 7, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 8, Col 1</td>
+            <td>Row 8, Col 2</td>
+            <td>Row 8, Col 3</td>
+            <td>Row 8, Col 4</td>
+            <td>Row 8, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 9, Col 1</td>
+            <td>Row 9, Col 2</td>
+            <td>Row 9, Col 3</td>
+            <td>Row 9, Col 4</td>
+            <td>Row 9, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 10, Col 1</td>
+            <td>Row 10, Col 2</td>
+            <td>Row 10, Col 3</td>
+            <td>Row 10, Col 4</td>
+            <td>Row 10, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 11, Col 1</td>
+            <td>Row 11, Col 2</td>
+            <td>Row 11, Col 3</td>
+            <td>Row 11, Col 4</td>
+            <td>Row 11, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 12, Col 1</td>
+            <td>Row 12, Col 2</td>
+            <td>Row 12, Col 3</td>
+            <td>Row 12, Col 4</td>
+            <td>Row 12, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 13, Col 1</td>
+            <td>Row 13, Col 2</td>
+            <td>Row 13, Col 3</td>
+            <td>Row 13, Col 4</td>
+            <td>Row 13, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 14, Col 1</td>
+            <td>Row 14, Col 2</td>
+            <td>Row 14, Col 3</td>
+            <td>Row 14, Col 4</td>
+            <td>Row 14, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 15, Col 1</td>
+            <td>Row 15, Col 2</td>
+            <td>Row 15, Col 3</td>
+            <td>Row 15, Col 4</td>
+            <td>Row 15, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 16, Col 1</td>
+            <td>Row 16, Col 2</td>
+            <td>Row 16, Col 3</td>
+            <td>Row 16, Col 4</td>
+            <td>Row 16, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 17, Col 1</td>
+            <td>Row 17, Col 2</td>
+            <td>Row 17, Col 3</td>
+            <td>Row 17, Col 4</td>
+            <td>Row 17, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 18, Col 1</td>
+            <td>Row 18, Col 2</td>
+            <td>Row 18, Col 3</td>
+            <td>Row 18, Col 4</td>
+            <td>Row 18, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 19, Col 1</td>
+            <td>Row 19, Col 2</td>
+            <td>Row 19, Col 3</td>
+            <td>Row 19, Col 4</td>
+            <td>Row 19, Col 5</td>
+         </tr>
+         <tr draggable="true">
+            <td>Row 20, Col 1</td>
+            <td>Row 20, Col 2</td>
+            <td>Row 20, Col 3</td>
+            <td>Row 20, Col 4</td>
+            <td>Row 20, Col 5</td>
+         </tr>
+      </tbody>
+   </table>
+
+   <script>
+      const tableBody = document.getElementById('tableBody');
+      const rows = tableBody.getElementsByTagName('tr');
+
+      for (let i = 1; i < rows.length; i++) {
+         const row = rows[i];
+         
+         row.addEventListener('dragstart', function() {
+            this.classList.add('dragging');
+         });
+
+         row.addEventListener('dragend', function() {
+            this.classList.remove('dragging');
+         });
+
+         row.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            const draggingRow = document.querySelector('.dragging');
+            if (draggingRow !== this) {
+               const allRows = [...tableBody.getElementsByTagName('tr')];
+               const currentPos = allRows.indexOf(this);
+               const draggingPos = allRows.indexOf(draggingRow);
+
+               if (draggingPos < currentPos) {
+                  this.parentNode.insertBefore(draggingRow, this.nextSibling);
+                  // console.log(this.nextSibling.innerHTML)
+               } else {
+                  this.parentNode.insertBefore(draggingRow, this);
+                  // console.log(this.innerHTML)
+               }
+            }
+         });
+      }
+   </script>
+</body>
+</html>
