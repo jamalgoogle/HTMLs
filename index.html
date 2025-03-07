@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Guess the Number</title>
+   <style>
+      body {
+         font-family: Arial, sans-serif;
+         display: flex;
+         flex-direction: column;
+         align-items: center;
+         justify-content: center;
+         min-height: 100vh;
+         margin: 0;
+         background: linear-gradient(135deg, #1e90ff, #00bfff);
+         color: white;
+      }
+
+      .container {
+         background: rgba(255, 255, 255, 0.1);
+         padding: 2rem;
+         border-radius: 10px;
+         box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+         text-align: center;
+      }
+
+      h1 {
+         margin-bottom: 1.5rem;
+      }
+
+      input {
+         padding: 10px;
+         font-size: 16px;
+         border: none;
+         border-radius: 5px;
+         margin: 10px 0;
+         width: 200px;
+         text-align: center;
+      }
+
+      button {
+         padding: 10px 20px;
+         font-size: 16px;
+         background-color: #ff6b6b;
+         color: white;
+         border: none;
+         border-radius: 5px;
+         cursor: pointer;
+         transition: background-color 0.3s;
+      }
+
+      button:hover {
+         background-color: #ff5252;
+      }
+
+      #message {
+         margin-top: 20px;
+         font-size: 18px;
+         font-weight: bold;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="container">
+      <h1></h1>
+      <p>Try to guess the number between 1 and 100</p>
+      <input type="number" id="input" placeholder="Enter your guess">
+      <button id="btn">Check Guess</button>
+      <div id="message"></div>
+   </div>
+
+   <script>
+      // Get the elements
+      const input = document.getElementById('input');
+      const btn = document.getElementById('btn');
+      const message = document.getElementById('message');
+      const head = document.getElementsByTagName('h1');
+
+      // Generate random number between 1 and 100
+      const randomNumber = Math.floor(Math.random() * 100);
+      console.log(randomNumber);
+      let attempts = 0;
+
+      // Add event listener to the button
+      btn.addEventListener('click', function () {
+         // Get the input value
+         const guess = parseInt(input.value); // to convert the input value to a number
+         attempts++;
+
+         // Check the guess
+         if (isNaN(guess) || guess < 1 || guess > 100) {
+            message.style.color = '#ff4444';
+            message.textContent = 'Please enter a valid number between 1 and 100';
+         } else if (guess === randomNumber) {
+            message.style.color = '#00ff00';
+            message.textContent = `Congratulations! You guessed it in ${attempts} attempts!`;
+            btn.disabled = true;
+         } else if (guess < randomNumber) {
+            message.style.color = '#ffffff';
+            message.textContent = 'Too low! Try again.';
+         } else {
+            message.style.color = '#ffffff';
+            message.textContent = 'Too high! Try again.';
+         }
+
+         // Clear input
+         input.value = '';
+         input.focus();
+         // Reload page after correct guess
+         if (guess === randomNumber) {
+            setTimeout(() => {
+               location.reload();
+               head[0].textContent = 'Guess a New Number!';
+            }, 1000);
+         }
+      });
+
+      // Allow Enter key to trigger button click
+      input.addEventListener('keyup', function (event) {
+         if (event.key === 'Enter') {
+            btn.click();
+         }
+      });
+   </script>
+</body>
+
+</html>
