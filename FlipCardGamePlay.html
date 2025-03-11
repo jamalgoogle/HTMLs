@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Card Matching Game</title>
+   <style>
+      * {
+         margin: 0;
+         padding: 0;
+         box-sizing: border-box;
+      }
+
+      body {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         min-height: 100vh;
+         background: #f0f0f0;
+      }
+
+      .game-container {
+         width: 640px;
+         display: grid;
+         grid-template-columns: repeat(4, 1fr);
+         gap: 10px;
+         perspective: 1000px;
+      }
+
+      .card {
+         position: relative;
+         width: 150px;
+         height: 150px;
+         transform-style: preserve-3d;
+         transition: transform 0.5s;
+         cursor: pointer;
+      }
+
+      .card.flipped {
+         transform: rotateY(180deg);
+      }
+
+      .card-front,
+      .card-back {
+         position: absolute;
+         width: 100%;
+         height: 100%;
+         backface-visibility: hidden;
+         border-radius: 10px;
+         display: flex;
+         justify-content: center;
+         align-items: center;
+         font-size: 2em;
+      }
+
+      .card-front {
+         background: #2196F3;
+         transform: rotateY(180deg);
+      }
+
+      .card-back {
+         background: #ff5722;
+      }
+
+      .score {
+         position: fixed;
+         top: 20px;
+         font-size: 24px;
+      }
+
+      .congratulations {
+         position: fixed;
+         top: 50%;
+         left: 50%;
+         transform: translate(-50%, -50%);
+         background: rgba(0, 0, 0, 0.8);
+         color: white;
+         padding: 20px;
+         border-radius: 10px;
+         font-size: 24px;
+         display: none;
+         z-index: 1000;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="score">Moves: <span id="moves">0</span></div>
+   <div class="game-container" id="gameContainer"></div>
+   <div class="congratulations" id="congratulations"> Congratulations! You've completed the game in <span id="finalMoves">0</span> moves! </div>
+</body>
+   <script>
+      const gameContainer = document.getElementById('gameContainer');
+      const movesDisplay = document.getElementById('moves');
+      const congratulations = document.getElementById('congratulations');
+      let moves = 0;
+      let firstCard = null;
+      let secondCard = null;
+      let locked = false;
+      let matchedPairs = 0;
+
+      const emojis = ['🎮', '🎮', '🎲', '🎲', '🎯', '🎯', '🎪', '🎪',
+         '🎭', '🎭', '🎨', '🎨', '🎪', '🎪', '🎯', '🎯'];
+
+      // Shuffle array
+      function shuffle(array) {
+         for (let i = array.length - 1; i > 0; i--) { // set index
+            const j = Math.floor(Math.random() * (i + 1)); // random shuffle
+            [array[i], array[j]] = [array[j], array[i]]; // [0 , 2] = [2, 0]
+         }
+         return array;
+      }
+
+      // Create cards
+      function createCards() {
+         const shuffledEmojis = shuffle(emojis);
+         shuffledEmojis.forEach((emoji, index) => {
+            const card = document.createElement('div');
+            card.classList.add('card');
+            card.setAttribute('data-index', index);
+            card.innerHTML = `
+                    <div class="card-front">${emoji}</div>
+                    <div class="card-back"></div>
+                `;
+            card.addEventListener('click', flipCard);
+            gameContainer.appendChild(card);
+         });
+      }
+
+      function flipCard() {
+         if (locked) return;
+         if (this === firstCard) return;
+
+         this.classList.add('flipped');
+
+         if (!firstCard) {
+            firstCard = this;
+            return;
+         }
+
+         secondCard = this;
+         moves++;
+         movesDisplay.textContent = moves;
+         checkForMatch();
+      }
+
+      function checkForMatch() {
+         const match = firstCard.querySelector('.card-front').textContent ===
+            secondCard.querySelector('.card-front').textContent;
+
+         if (match) {
+            matchedPairs++;
+            disableCards();
+            if (matchedPairs === emojis.length / 2) {
+               document.getElementById('finalMoves').textContent = moves;
+               congratulations.style.display = 'block';
+            }
+         } else {
+            unflipCards();
+         }
+      }
+
+      function disableCards() {
+         firstCard.removeEventListener('click', flipCard);
+         secondCard.removeEventListener('click', flipCard);
+         resetBoard();
+      }
+
+      function unflipCards() {
+         locked = true;
+         setTimeout(() => {
+            firstCard.classList.remove('flipped');
+            secondCard.classList.remove('flipped');
+            resetBoard();
+         }, 1000);
+      }
+
+      function resetBoard() {
+         [firstCard, secondCard] = [null, null];
+         locked = false;
+      }
+
+      // Initialize game
+      createCards();
+   </script>
+
+</html>
