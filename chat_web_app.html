@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>Chat UI</title>
+   <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css"
+      integrity="sha512-9usAa10IRO0HhonpyAIVpjrylPvoDwiPUiKdWk5t3PyolY1cOd4DSE0Ga+ri4AuTroPR5aQvXU9xC6qOPnzFeg=="
+      crossorigin="anonymous" referrerpolicy="no-referrer" />
+   <style>
+      @keyframes slideIn {
+         from {
+            opacity: 0;
+            transform: translateY(20px);
+         }
+
+         to {
+            opacity: 1;
+            transform: translateY(0);
+         }
+      }
+
+      .message-animation {
+         animation: slideIn 0.3s ease-out forwards;
+      }
+   </style>
+</head>
+
+<body class="bg-gradient-to-r from-blue-800 to-green-600 text-white h-screen w-screen flex justify-center items-center">
+   <div class="flex w-screen h-screen rounded-lg overflow-hidden shadow-lg">
+      <aside class="w-1/4 bg-gray-800 p-4 flex flex-col">
+         <div class="flex items-center mb-4 cursor-pointer">
+            <div class="bg-gray-700 rounded-full w-10 h-10 flex items-center justify-center">A</div>
+            <div class="ml-2 flex-grow">User name</div>
+            <div class="text-gray-400">
+               <i class="fas fa-ellipsis-v"></i>
+            </div>
+         </div>
+         <div class="relative mb-4 flex items-center">
+            <input type="text" placeholder="Search..."
+               class="bg-gray-700 rounded-lg w-full py-2 px-3 focus:outline-none">
+            <i class="fas fa-search absolute right-14 top-3 text-gray-400"></i>
+            <i class="fas fa-plus bg-green-500 rounded-full p-2 ml-2 cursor-pointer"></i>
+         </div>
+         <div class="overflow-y-auto flex-grow ">
+            <div class="flex items-center mb-6 cursor-pointer p-4 border-b border-gray-700 ">
+               <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center ">A</div>
+               <div class="ml-6">Bassem Jamal</div>
+            </div>
+            <div class="flex items-center mb-6 cursor-pointer p-4 border-b border-gray-700 ">
+               <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center ">A</div>
+               <div class="ml-6">Hussein Jamal</div>
+            </div>
+            <div class="flex items-center mb-6 cursor-pointer p-4 border-b border-gray-700 ">
+               <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center ">A</div>
+               <div class="ml-6">Emad Jamal</div>
+            </div>
+            <div class="flex items-center mb-2 cursor-pointer  p-4 border-b border-gray-700 ">
+               <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center">A</div>
+               <div class="ml-6">Karem Jamal</div>
+            </div>
+         </div>
+      </aside>
+      <main class="w-3/5 bg-gray-900 flex flex-col">
+         <header class="p-4 flex items-center justify-between border-b border-gray-700">
+            <div class="flex items-center">
+               <div class="bg-gray-700 rounded-full w-10 h-10 flex items-center justify-center">A</div>
+               <div class="ml-2">Jamal Google</div>
+            </div>
+            <div class="flex space-x-4">
+               <i class="fas fa-phone"></i>
+               <i class="fas fa-video"></i>
+               <i class="fas fa-ellipsis-v"></i>
+            </div>
+         </header>
+         <div id="chatArea" class="flex-grow p-4 overflow-y-auto">
+            <div class="flex mb-4">
+               <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center">A</div>
+               <div class="ml-2 bg-gray-800 rounded-lg p-2">
+                  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia, sunt.</p>
+                  <span class="text-xs text-gray-400">2 min ago</span>
+               </div>
+            </div>
+            <div class="flex justify-end mb-4">
+               <div class="bg-green-600 rounded-lg p-2">
+                  <p>Lorem ipsum dolor sit amet consectetur hello adipisicing elit. Mollitia, sunt.</p>
+                  <span class="text-xs text-gray-400">1 min ago</span>
+               </div>
+            </div>
+         </div>
+         <footer class="p-4 border-t border-gray-700 flex items-center">
+            <div class="flex space-x-4">
+               <i class="fas fa-paperclip"></i>
+               <i class="fas fa-microphone"></i>
+            </div>
+            <button id="messageTypeToggle"
+               class="ml-4 px-3 py-1 bg-gray-700 rounded-lg text-sm text-gray-400">Sender</button>
+            <input type="text" id="messageInput" placeholder="Type a message..."
+               class="bg-gray-800 rounded-lg flex-grow py-2 px-3 mx-4 focus:outline-none">
+            <button onclick="sendMessage()" class="bg-green-600 rounded-lg py-2 px-4 flex items-center">
+               Send <i class="fas fa-paper-plane ml-2"></i>
+            </button>
+         </footer>
+      </main>
+      <aside class="w-1/5 bg-gray-800 p-4">
+         <div class="flex flex-col items-center mb-4">
+            <div class="bg-gray-700 rounded-full w-16 h-16 flex items-center justify-center">A</div>
+            <div class="mt-2 font-semibold">Jamal Google</div>
+            <p class="text-xs text-gray-400">Lorem ipsum dolor sit.</p>
+         </div>
+         <div class="space-y-2">
+            <div class="flex justify-between items-center cursor-pointer">
+               Chat Settings <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="flex justify-between items-center cursor-pointer">
+               Privacy & help <i class="fas fa-chevron-up"></i>
+            </div>
+            <div class="flex justify-between items-center cursor-pointer">
+               Shared Photos <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="flex justify-between items-center cursor-pointer">
+               Shared Files <i class="fas fa-chevron-down"></i>
+            </div>
+         </div>
+         <button class="bg-red-600 rounded-lg py-2 px-4 mt-4 w-full">Block User</button>
+      </aside>
+   </div>
+
+</body>
+
+<script>
+   let isSending = true;
+   const messageTypeToggle = document.getElementById('messageTypeToggle');
+
+   messageTypeToggle.addEventListener('click', function () {
+      isSending = !isSending;
+      messageTypeToggle.textContent = isSending ? 'Sender' : 'Receiver';
+   });
+
+   function sendMessage() {
+      const messageInput = document.getElementById('messageInput');
+      const chatArea = document.getElementById('chatArea');
+      const message = messageInput.value.trim();
+
+      if (message !== '') {
+         const currentTime = new Date();
+         let messageHTML;
+
+         if (!isSending) {
+            // Receiver message
+            messageHTML = `
+                        <div class="flex mb-4 message-animation">
+                            <div class="bg-gray-700 rounded-full w-8 h-8 flex items-center justify-center">A</div>
+                            <div class="ml-2 bg-gray-800 rounded-lg p-2">
+                                <p>${message}</p>
+                                <span class="text-xs text-gray-400">just now</span>
+                            </div>
+                        </div>
+                    `;
+         } else {
+            // Sender message
+            messageHTML = `
+                        <div class="flex justify-end mb-4 message-animation">
+                            <div class="bg-green-600 rounded-lg p-2">
+                                <p>${message}</p>
+                                <span class="text-xs text-gray-400">just now</span>
+                            </div>
+                        </div>
+                    `;
+         }
+
+         chatArea.insertAdjacentHTML('beforeend', messageHTML);
+         messageInput.value = '';
+         chatArea.scrollTop = chatArea.scrollHeight;
+      }
+   }
+
+   document.getElementById('messageInput').addEventListener('keypress', function (e) {
+      if (e.key === 'Enter') {
+         sendMessage();
+      }
+   });
+</script>
+
+</html>
